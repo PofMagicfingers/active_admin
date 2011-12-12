@@ -6,7 +6,9 @@ module ActiveAdmin
     def filter(method, options = {})
       return "" if method.nil? || method == ""
       options[:as] ||= default_input_type(method)
+      options[:if] ||= Proc.new { |_| true }
       return "" unless options[:as]
+      return "" unless options[:if].call
       content = input(method, options)
       form_buffers.last << content.html_safe if content
     end
